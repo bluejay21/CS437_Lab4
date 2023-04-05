@@ -23,6 +23,10 @@ clientEndPoint = "a2e5kmx3udhg78-ats.iot.us-east-2.amazonaws.com"
 clientCredentials = "./certificates/Amazon_Root_CA_File/AmazonRootCA1.pem"
 # /Users/jacobriese/Documents/CS_437/Lab4/
 
+# class Message:
+#     payload = "DATA"
+#     topic = "myVehicleTopic"
+
 class MQTTClient:
     def __init__(self, device_id, cert, key):
         # For certificate based connection
@@ -76,14 +80,17 @@ for device_id in range(device_st, device_end):
     client = MQTTClient(device_id,certificate_formatter.format(device_id,device_id) ,key_formatter.format(device_id,device_id))
     client.client.connect()
     clients.append(client)
- 
+
+
+count = 0
 
 while True:
     print("send now?")
     x = input()
     if x == "s":
         for i,c in enumerate(clients):
-            c.publish()
+            c.publish(data[i].vehicle_CO2[count])
+            count = count + 1
 
     elif x == "d":
         for c in clients:
